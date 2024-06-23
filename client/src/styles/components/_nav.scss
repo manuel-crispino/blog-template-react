@@ -1,0 +1,92 @@
+@import 'displaySize';
+
+.nav-btn:hover
+{
+  color:yellow;
+  outline: solid rgba(255, 255, 0, 0.522);
+}
+
+  .ul-nav{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .ul-nav li {
+    display:inline-block; 
+    margin-right:2%;
+}
+
+.ul-popup{
+  text-align: right;
+  display: block;
+  position: absolute;
+  right: 8px;
+  top:60px;
+  background-color: rgb(44, 145, 246);
+  list-style: none;
+  padding: 1%;
+  z-index: 1000; 
+  @include sml {
+    top:50px;
+  }
+  @include xs {
+    top:50px;
+  }
+}
+.ul-popup li{
+  display: block;
+}
+
+.nav-btn{
+
+    background-color: transparent; 
+    border: none;  
+    margin: 1%; 
+    font-size: large;
+    cursor: pointer; 
+    color: white; 
+    text-decoration: none; 
+    display: inline-block;
+    white-space: nowrap; 
+    @include sml{
+      font-size: large ;
+      
+        }
+        @include xs{
+          font-size: small ;
+      
+            }
+}
+
+
+.float-right{
+  float:right;
+  padding-top: 2%;
+
+  @include sml{
+padding-top: 3%;
+
+  }
+  @include xs{
+    padding-top: 3%;
+
+      }
+}
+
+.img-logo{
+height: 3rem;
+width: auto;
+margin:0;
+padding:5%;
+@include sml{
+height: 2.2rem;
+  
+    }
+    @include xs{
+      padding-top: 5%;
+      height: 2rem;
+        }
+
+}

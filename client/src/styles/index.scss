@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import 'components/font';
+@import 'components/displaySize';
+@import 'components/nav';
+@import 'components/blog';
+@import 'components/login';
+
+:root{
+background-color: rgb(239, 236, 236);
+font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.flex{
+  display: flex;
+ flex-wrap: wrap;
+}
+
+.flex-row{
+  flex-direction: row;
+ 
+}
+
+.flex-column{
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.circle{
+  width: 10rem;
+  height: 10rem;
+  border-radius:10% ;
+}
+
+.circle:hover{
+background-color: rgb(206, 206, 246);
+}
+
+
+.hide{
+  display:none;
+}
+
+.div-settings-light{
+  background-color: rgb(255, 255, 255);
+  margin: 1%;
+  padding: 1%;
+  }
+ 
+.inline-block{
+  display: inline-block;
+}
+
+.margin-right-1{
+  margin-right: 1%;
+}
+
+.red{
+  background-color: red;
+  color: white;
+}
+
+.red:hover{
+  background-color:yellow;
+  color:black;
+}
+
+
+.float-right-cross{
+  float:right;
+}
+
+.no-style-btn{
+border: none;
+outline: none;
+background-color: transparent;
+margin-top: 1%;
+cursor: pointer;
+}
+
+.no-style-btn:hover{
+color: grey;
+outline: solid rgb(216, 59, 59);
+}
+
+.ul-no-style{
+  list-style-type: none;
+  margin: 1%;
+  padding: 0;
+  overflow: hidden;
+}
+.ul-no-style li{
+  width: 100%;
+}
+.padding-1{
+padding:1%;
+}
+
