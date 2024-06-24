@@ -72,6 +72,13 @@ background-color: rgb(206, 206, 246);
 
 .float-right-cross{
   float:right;
+  cursor:pointer;
+  color: white;
+  background-color: rgb(238, 18, 18);
+  border: solid rgb(33, 1, 1);
+}
+.float-right-cross:hover{
+  background-color: rgb(148, 148, 147);
 }
 
 .no-style-btn{
@@ -100,3 +107,9 @@ outline: solid rgb(216, 59, 59);
 padding:1%;
 }
 
+.margin-top-2{
+  margin-top: 2%;
+}
+.margin-top-1{
+  margin-top: 1%;
+}

@@ -27,6 +27,7 @@ export default function Home() {
         setColor] = useState < string > ("");
     const [userData,
         setUserData] = useState < UserData > ({id: "", name: ""});
+    const [isLoginOut,setIsLoginOut]= useState<boolean>(false);
 
     const [id,
         setId] = useState < number > (0)
@@ -38,22 +39,23 @@ export default function Home() {
 
     function handleNewPost() {
         setIsNewPost(!isNewPost);
-        console.log("is clicked");
     }
 
+
     function handleLogin() {
-        setIsLoginVisible(!isLoginVisible)
-        console.log("login")
+        setIsLoginVisible(!isLoginVisible);
+      
     }
 
     function handleLogout() {
+       
      setIsNewPost(false);
         const confirmLogout = window.confirm("Are you sure you want to logout ? ")
         if (confirmLogout) {
+            setIsLoginOut(true);
             setIsAdmin(false);
             setIsUser(false);
             setUserData({id: "", name: ""});
-         
         } else {
             return null;
         }
@@ -75,12 +77,14 @@ console.log("this is the passed obj == ", currentUser);
 
     function handleIsAdmin(adminId:number | undefined) {
      if(adminId !== undefined){
+
         const admin = {
             id: adminId.toString(),
             name: "Admin",
         }
         setAdminName(admin.name)
         setIsAdmin(true);
+        setIsLoginOut(false);
         if ( admin){
         setUserData(admin);
         console.log("this is the passed obj == ", admin);
@@ -111,15 +115,18 @@ console.log("this is the passed obj == ", currentUser);
                 handleLogout={handleLogout}
                 isAdmin={isAdmin}
                 handleLogin={handleLogin}
-                onClick={handleNewPost}/>
+                onClick={handleNewPost}
+                />
             <Settings
                 closeSettings={handleSettings}
                 newColor={(newColor : string) => handleNewColor(newColor)}
-                isClicked={isSettings}/> {isLoginVisible
-                ? <Login isUser={(userId)=>handleIsUser(userId)} isAdmin={(adminId)=>handleIsAdmin(adminId)} postForm={handleLogin}/>
-                : ""}
+                isClicked={isSettings}/> 
+                {isLoginVisible?
+                 (<Login closeLoginForm={()=>setIsLoginVisible(!isLoginVisible)} isUser={(userId)=>handleIsUser(userId)} isAdmin={(adminId)=>handleIsAdmin(adminId)} postForm={handleLogin}/>)
+                : ("")
+                }
             <Blog
-                handleNewPost={handleNewPost}
+                isLoginOutWhileUpdating={isLoginOut}
                 isUser={isUser}
                 getUserData={userData}
                 isAdmin={isAdmin}

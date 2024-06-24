@@ -5,6 +5,7 @@ interface Props{
     postForm:()=>void;
     isAdmin:(admin:number | undefined)=>void;
     isUser:(user:number |undefined)=>void;
+    closeLoginForm:()=>void;
    
 }
 
@@ -79,7 +80,12 @@ else
 setPassword("");
 }
 }
-    return (<div className="div-form">
+
+
+    return (
+        <div className=" overlay">
+    <div className="login-form">
+        <button type="button" title="exit" className="float-right-cross" onClick={()=>props.closeLoginForm()}>X</button>
         <form id="login-form" action="post" onSubmit={handleSubmit}>
             <ul id="ul-no-style">
                 <li><h2>Login</h2></li>
@@ -92,16 +98,17 @@ setPassword("");
             type={isPasswordVisible? "text":"password"} 
             onChange={handlePassword} placeholder="password" autoComplete="current-password" value={password} /> 
             </li>
-           <li> 
+           <li className="margin-top-1"> 
             <label htmlFor="showPassword" >show password</label>
            <input id="showPassword" type="checkbox" name="showPassword" aria-label="Show Password" 
             onChange={()=>setIsVisible(!isPasswordVisible)}
             />
            </li>
            <li><input type="hidden" value={csrfToken}/></li>
-           <li><button type="submit">submit</button></li>
+           <li><button className="margin-top-2" type="submit">submit</button></li>
             </ul>
         </form>
 
+    </div>
     </div>)
 }
