@@ -9,6 +9,14 @@ interface Props{
    
 }
 
+interface ServerData {
+    id:number;
+    email: string;
+    role:string;
+    success: boolean ;
+
+}
+
 
 
 export default function Login (props:Props){
@@ -17,6 +25,7 @@ export default function Login (props:Props){
     const [password,setPassword]=useState<string>("");
     const [csrfToken,setToken]=useState<string>("");
     const [isPasswordVisible,setIsVisible]=useState<boolean>(false);
+    const [serverData,setServerData] =useState<ServerData | null>()
     
 
     function handleEmail(event:ChangeEvent<HTMLInputElement>){
@@ -28,46 +37,72 @@ export default function Login (props:Props){
         setPassword(newValue);
     }
 
-    function handleSubmit(event:FormEvent){
-event.preventDefault();
-const randomToken = "superSecretRandomToken";
-setToken(randomToken);
+
+    async function handleSubmit(event:FormEvent){
+    event.preventDefault();
+
+   try {
+    
+    const response = await fetch("/csrfToken", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    
+    if (response.ok) {
+        const data = await response.json();
+        console.log(data); // Do something with the data
+        setToken(data)
+    } else {
+        console.error("Failed to fetch CSRF token");
+    };
+
+
 const data ={
     email:email,
     password:password,
-    csrfToken:randomToken,
+    csrfToken:csrfToken,
 }
-const serverData=[{
-    id:0,
-    email:"email@gmail.com",
-    password:"password",
-    csrfToken:randomToken,
-    admin:false,
-},{
-    id:1,
-    email:"admin@gmail.com",
-    password:"password",
-    csrfToken:randomToken,
-    admin:true,
-}
-]
-const user = serverData.find((database)=>database.email === data.email && database.password === data.password );
-if (user)
+const loginResponse= await fetch("/login", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+  body:JSON.stringify(data),
+});
+
+if (loginResponse.ok) {
+    const data = await loginResponse.json();
+    console.log(data); // Do something with the data
+    setServerData({ 
+        id:data.id,
+        email: data.email,
+        role: data.role ,
+        success: data.success,
+
+     })
+} else {
+    console.error("Failed to fetch user !");
+};
+
+
+if (serverData)
 {
 props.postForm()
 console.log("user found");
 setEmail("");
 setPassword("");
 
-if (user.admin === true){
-alert(" Welcome Admin ! you have successfully logged ");
-const admin = serverData.find((user)=>user.admin === true);
+if (serverData.role === "admin" ){
+const admin = serverData;
 console.log("admin successfully logged !");
 if(admin){
+    alert(" Welcome Admin ! you have successfully logged ",); 
 props.isAdmin(admin.id);}
 }else {
-    alert(" Welcome User ! you have successfully logged ",); 
-    props.isUser(user.id);   
+    alert(" Welcome user ! you have successfully logged ",); 
+    props.isUser(serverData.id);   
     console.log("user successfully logged !");
 }
 
@@ -78,6 +113,8 @@ else
     alert("should be  email = email@gmail.com  and password = password ");
     setEmail("");
 setPassword("");
+}}catch(error){
+    console.log(error);
 }
 }
 

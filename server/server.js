@@ -21,10 +21,9 @@ app.get('/', (req, res) => {
     res.sendFile(join(__dirname, '../client/dist/index.html'));
 });
 
-app.post('/get-csrf-token', (req, res) => {
+app.post('/csrfToken', (req, res) => {
     // Genera un token CSRF casuale (puoi sostituirlo con la tua logica di generazione del token)
     const csrfToken = Math.random().toString(36).substring(2);
-    
     // Invia il token CSRF al client come parte della risposta JSON
     res.json({ csrfToken });
 });

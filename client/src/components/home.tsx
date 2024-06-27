@@ -1,4 +1,4 @@
-import {useState,useEffect} from "react";
+import {useState} from "react";
 import Blog from "./Blog/blog";
 import Nav from "./nav/nav";
 import Login from "./login/login";

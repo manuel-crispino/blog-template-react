@@ -1,37 +1,49 @@
-
-
-
 const handleLogin = async (req, res) => {
-    // Leggi i dati inviati da React dal corpo della richiesta
-   const { username, password,csrfToken } = await req.body;
-try{
-    // Ora puoi fare il console log dei dati ricevuti
-    console.log("Username:", username);
-    console.log("Password:", password);
-    console.log("token:", csrfToken);
-    const userExist = await checkUserCredentials(username,password);
-if(userExist){
-res.json({
-    admin:username,
-    success:true,
-    message: "you have successfully logged in "
-});
-res.end();
-}else{
-    res.json({
-        success:false,
-        message: "username or password incorrect "
-    });
-    res.end();
-}
-}catch(error){
-    console.log(error.message);
-    res.end();
-}
+    const { email, password, csrfToken } = req.body; // Non è necessario usare await qui
+
+    try {
+       
+
+        const user = await checkUserCredentials(email, password);
+
+        if (user.exists) {
+            res.json({
+                id:user.id,
+                role: user.role, // Invia il ruolo dell'utente nella risposta
+                email: email,
+                success: true,
+                message: "You have successfully logged in."
+            });
+            console.log("email:", email);
+            console.log("Password:", password);
+            console.log("token:", csrfToken);
+            console.log("user-role:",user.role)
+        } else {
+            res.json({
+                success: false,
+                message: "email or password incorrect."
+            });
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error."
+        });
+    }
 };
 
-async function checkUserCredentials(username,password){
-   return username === 'manuel' && password === 'a';
-};
+async function checkUserCredentials(email, password) {
+    const user = email === 'email@gmail.com' && password === 'password';
+    const admin = email === 'admin@gmail.com' && password === 'password';
+
+    if (user) {
+        return { id:1, role: 'user', exists: true }; // Ritorna un oggetto con il ruolo dell'utente e indica che l'utente esiste
+    } else if (admin) {
+        return { id:2, role: 'admin', exists: true }; // Ritorna un oggetto con il ruolo admin e indica che l'utente esiste
+    } else {
+        return { exists: false }; // Se l'utente non è trovato, ritorna che non esiste
+    }
+}
 
 export { handleLogin};
