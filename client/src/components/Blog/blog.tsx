@@ -2,6 +2,7 @@ import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import AddCommentIcon from '@mui/icons-material/AddComment';
+
 interface UserData {
     name : string;
     id : string;
@@ -73,12 +74,14 @@ export default function Blog(props : Props) {
             }
         }, [isUpdating, props.isLoginOutWhileUpdating]);
 
+    
+        //form event below //
     function handleSubmit(event : FormEvent) {
         event.preventDefault();
-        const idNumber = props
+        const idNumber = props  // this generate an id for each time user create a new post //
             .generateId()
             .toString();
-        const newIdText = `post-n-${idNumber}`;
+        const newIdText = `post-n-${idNumber}`; // attach the generated id  into a scss id // 
         const newDate = new Date().toLocaleString();
         const author = props.authorName;
         setIsFormVisible(false);
@@ -270,6 +273,7 @@ export default function Blog(props : Props) {
             )}
 
             {blog.map(post => (
+                // POST Content Start //
                 <div className={`${hide} div-post`} key={post.id}>
                     <h2 className="font-xxl">{post.title}</h2>
                     <pre className="font-xl text-dark-grey">{post.content}</pre>
@@ -285,7 +289,9 @@ export default function Blog(props : Props) {
                         () => handleDelete(post.id)
                     } > Delete </button>
                         </ >)}
-                    <br/>
+                    
+                    {/* Post Content end */}
+                    {/*Post HandleReaction Start */}
                     <button
                         type="button"
                         className="no-style-btn"
@@ -298,7 +304,10 @@ export default function Blog(props : Props) {
                     <button
                         title="Add comment.."
                         type="button"
-                        className="no-style-btn comment-btn"><AddCommentIcon/></button>
+                        className="no-style-btn comment-btn"><AddCommentIcon/>
+                        </button>
+                        {/*Post HandleReaction End */}
+                        {/* CheckLikest Start */}
                     <br/>
                     <button
                         title="Check likes"
@@ -311,6 +320,9 @@ export default function Blog(props : Props) {
                                 ? ("")
                                 : (`${post.likes} person like this post`))}
                     </button>
+                     {/* CheckLikest Start */}
+                     {/* When CheckLike is Clicked CheckLikeOnClick() opens likeList Start */}
+                      {/* LikeList Start */}
 
                     <div className={`${overlay} ${hideLikeList}`}>
                         <div className={`like-list ${hideLikeList}`}>
@@ -356,6 +368,8 @@ export default function Blog(props : Props) {
                                     )}
                             </ul>
                         </div>
+                         {/* LikeList end */}
+
                     </div>
                 </div>
             ))}

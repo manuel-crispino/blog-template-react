@@ -52,9 +52,9 @@ export default function Login (props:Props){
     
     if (response.ok) {
         const data = await response.json();
-        console.log(data); // Do something with the data
-        setToken(data)
+        setToken(data);
     } else {
+        setToken("FrontEndTrial");
         console.error("Failed to fetch CSRF token");
     };
 
@@ -74,7 +74,6 @@ const loginResponse= await fetch("/login", {
 
 if (loginResponse.ok) {
     const data = await loginResponse.json();
-    console.log(data); // Do something with the data
     setServerData({ 
         id:data.id,
         email: data.email,
@@ -83,34 +82,70 @@ if (loginResponse.ok) {
 
      })
 } else {
-    console.error("Failed to fetch user !");
+    // Here start the code of block to delete or comment when using in production or testing the server // 
+      // Only use in front developer mode cancel when production //
+    const arrayUsers =  [{ 
+        id: 1,
+        email: "admin@gmail.com",
+        password: "password",
+        role: "admin",
+        success: true ,
+
+     },{ 
+        id: 2,
+        email: "email@gmail.com",
+        password:"password",
+        role: "user",
+        success: true ,
+
+     }];
+  
+   const currentUser =  arrayUsers.find((user)=> user.email === data.email && user.password === data.password);
+   if (currentUser){
+    setServerData({ 
+        id: currentUser.id,
+        email: currentUser.email,
+        role: currentUser.role,
+        success: currentUser.success ,
+
+     },
+    );
+        //  Attention !!!!!//
+        // until here you should cover or delete the block of code above when in production or testing server //  
+}else if (!currentUser){
+        alert("users not found try again!")
+        console.error("Failed to fetch user !");
+    }
+    else{
+        const error = new Error();
+        console.log(error);
+    }
+   
 };
 
 
 if (serverData)
 {
 props.postForm()
-console.log("user found");
 setEmail("");
 setPassword("");
 
 if (serverData.role === "admin" ){
 const admin = serverData;
-console.log("admin successfully logged !");
 if(admin){
-    alert(" Welcome Admin ! you have successfully logged ",); 
+    alert(" Welcome Admin ! you have successfully logged "); 
 props.isAdmin(admin.id);}
 }else {
-    alert(" Welcome user ! you have successfully logged ",); 
+    alert(" Welcome user ! you have successfully logged "); 
     props.isUser(serverData.id);   
-    console.log("user successfully logged !");
+    
 }
 
 }
 else
 { 
     console.log(data ," !== " ,serverData)
-    alert("should be  email = email@gmail.com  and password = password ");
+    alert("email or password incorrect  ");
     setEmail("");
 setPassword("");
 }}catch(error){
@@ -145,6 +180,8 @@ setPassword("");
            <li><button className="margin-top-2" type="submit">submit</button></li>
             </ul>
         </form>
+        <br />
+        
 
     </div>
     </div>)

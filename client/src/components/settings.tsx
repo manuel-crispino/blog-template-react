@@ -52,7 +52,9 @@ props.newColor(inputColor);
 <button type='submit'>Save change</button>
 </form>
 </div>
-) :""}
+) 
+:("")
+}
 </div>
     )
 }
