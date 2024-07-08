@@ -2,6 +2,8 @@ import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import AddCommentIcon from '@mui/icons-material/AddComment';
+import Form from "./form/form";
+import Post from "./post/post";
 
 interface UserData {
     name : string;
@@ -18,8 +20,7 @@ interface Props {
     isUser : boolean;
     isLoginOutWhileUpdating: boolean;
 }
-
-interface BlogContent {
+ interface BlogContent {
     id : string;
     title : string;
     content : string;
@@ -76,7 +77,7 @@ export default function Blog(props : Props) {
 
     
         //form event below //
-    function handleSubmit(event : FormEvent) {
+   async function handleSubmit(event : FormEvent) {
         event.preventDefault();
         const idNumber = props  // this generate an id for each time user create a new post //
             .generateId()
@@ -95,13 +96,28 @@ export default function Blog(props : Props) {
             author: author,
             likes: 0
         };
-
         setBlog([
             ...blog,
             newPost
         ]);
         setTitle("");
         setContent("");
+        try {
+            const response = await fetch("/submit-post", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(newPost),
+            });
+        
+            if (response.ok) {
+                console.log(" data arrived to server ") 
+            }else{
+            console.log("data not received problem to submit ");
+        }}catch(err){
+            console.log(err)
+        }
     }
 
     function handleTitle(event : ChangeEvent < HTMLInputElement >) {
@@ -237,59 +253,36 @@ export default function Blog(props : Props) {
         <div>
             {isFormVisible && (
                 <div className="div-form">
-                    <button
-                        title="close"
-                        type="button"
-                        onClick={ isUpdating? (handleCloseWhileUpdate):(props.changeValue) }
-                        className="float-right-cross">X</button>
-                    <form
-                        id="blog-form"
-                        action="Post"
-                        onSubmit={editingPostId
-                        ? handleUpdate
-                        : handleSubmit}>
-                        <input
-                            id="title-input"
-                            className="input-title"
-                            type="text"
-                            onChange={handleTitle}
-                            maxLength={100}
-                            placeholder="Create title..."
-                            value={title}/>
-                        <textarea
-                            id="blog-text-area"
-                            className="input-content"
-                            onChange={handleContent}
-                            maxLength={10000}
-                            placeholder="Write content..."
-                            value={content}/>
-                        <button className="post-btn" type="submit">
-                            {editingPostId
-                                ? "Update"
-                                : "Post"}
-                        </button>
-                    </form>
+                    {/* Form Component*/ }
+                   <Form
+                    isUpdating={isUpdating}
+                    handleCloseWhileUpdate={handleCloseWhileUpdate}
+                    changeValue={props.changeValue}
+                    handleSubmit={handleSubmit}
+                    handleUpdate={handleUpdate}
+                    editingPostId={editingPostId}
+                    content={content}
+                    title={title}
+                    handleTitle={handleTitle}
+                    handleContent={handleContent}/>
+                    
                 </div>
             )}
 
             {blog.map(post => (
-                // POST Content Start //
-                <div className={`${hide} div-post`} key={post.id}>
-                    <h2 className="font-xxl">{post.title}</h2>
-                    <pre className="font-xl text-dark-grey">{post.content}</pre>
-                    <p className="font-xl cursive text-grey">
-                            <i>Author: {post.author}</i>
-                    </p>
-                    <p className="font-l font-100 text-grey">
-                        <i>Created on:  {post.date}</i>
-                    </p>
-                    {props.isAdmin && ( <> <button type="button" onClick={() => handleEdit(post.id)}>
-                        Edit
-                    </button> < button className = "delete-post" type = "button" onClick = {
-                        () => handleDelete(post.id)
-                    } > Delete </button>
-                        </ >)}
-                    
+             /*  PostedContent Component  Start  */
+             <div className={`${hide} div-post`} key={post.id}>
+                <Post
+                 hide={hide}
+                 id={post.id}
+                 title={post.title}
+                 content={post.content}
+                 author={post.author}
+                 date={post.date}
+                 isAdmin={props.isAdmin}
+                 handleEdit={()=>handleEdit(post.id)}
+                 handleDelete={()=>handleDelete(post.id)}
+                />
                     {/* Post Content end */}
                     {/*Post HandleReaction Start */}
                     <button
