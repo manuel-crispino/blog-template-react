@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { handleLogin } from './routes/controllers/loginController.js';
 import { handleRegister } from './routes/controllers/registerController.js';
 import dataUser from "./routes/controllers/userDataController.js";
+import handleSubmitPost  from "./routes/controllers/submitPost.js"
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -35,6 +36,8 @@ app.post("/save-user-data",dataUser);
 app.post("/login",handleLogin);
 
 app.post("/register",handleRegister);
+
+app.post("/submit-post",handleSubmitPost);
 
 
 
