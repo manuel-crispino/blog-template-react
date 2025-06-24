@@ -57,7 +57,7 @@ Addition of more features such as user profiles, comments, etc.
 ## this project is an open project ! 
 i create this project to share it to the world so feel free to clone and modified as you wish . 
 
-## Is not ready to production .
+## Is not ready for production .
 please note this is not ready to production is a very basic template highly customizable to speed up the process of developing .
 
 ## How you can custom this project ? 
